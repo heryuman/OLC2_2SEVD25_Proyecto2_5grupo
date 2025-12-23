@@ -1,0 +1,30 @@
+.upload-container {
+  cursor: pointer;
+}
+
+.upload-box {
+  width: 300px;
+  height: 250px;
+  border: 2px dashed #666;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #a15959;
+  transition: 0.2s ease;
+}
+
+.upload-box:hover {
+  background: #f1f1f1;
+}
+
+.icon {
+  font-size: 60px;
+}
+
+.upload-box p {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 500;
+}

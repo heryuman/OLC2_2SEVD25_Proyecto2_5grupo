@@ -1,0 +1,31 @@
+.carga-container {
+  padding: 40px;
+}
+
+.carga-container h2 {
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+.carga-content {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.botones button {
+  display: block;
+  padding: 12px;
+  width: 180px;
+  margin-bottom: 15px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.botones button:hover {
+  background: #222;
+}
