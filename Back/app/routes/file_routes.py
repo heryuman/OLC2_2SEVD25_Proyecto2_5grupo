@@ -107,6 +107,15 @@ def limpiar():
             else:
                 df[column] = df[column].astype("int64")
 
+        
+        df['fecha_reseña'] = pd.to_datetime(
+            df['fecha_reseña'],
+            format='%Y-%m-%d',
+            errors='coerce'
+        )
+        df = df.dropna(subset=['fecha_reseña'])
+
+
         print("**************************************************************")
         print("*********************CON CORRECCIONES*************************")
         print(df.head())
