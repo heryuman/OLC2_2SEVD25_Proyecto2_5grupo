@@ -1,12 +1,13 @@
 import { useState } from "react";
 import UploadBox from "../components/UploadBox";
 import "../styles/cargamasiva.css";
+import { API_BASE_URL } from "../constant/url";
 
 export default function CargaMasiva() {
   const [file, setFile] = useState<File | null>(null);
 
   const limpiarDatos = async () => {
-    const response= await fetch("http://localhost:5000/api/estudiantes/limpieza",{
+    const response= await fetch(`${API_BASE_URL}/api/estudiantes/limpieza`,{
       method:"GET"
     });
 
@@ -21,7 +22,7 @@ export default function CargaMasiva() {
   
 
     try{
-      const response= await fetch("http://localhost:5000/api/model/",{
+      const response= await fetch(`${API_BASE_URL}/api/model/`,{
         method:"GET",
 
       });
@@ -48,7 +49,7 @@ export default function CargaMasiva() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:5000/api/file/upload", {
+      const response = await fetch(`${API_BASE_URL}/api/file/upload`, {
         method: "POST",
         body: formData,
       });
