@@ -1,4 +1,10 @@
 import { Link } from "react-router-dom";
+import {
+  UploadOutlined,
+  SettingOutlined,
+  ExperimentOutlined,
+  BulbOutlined,
+} from "@ant-design/icons";
 import "../styles/navbar.css";
 
 export default function Navbar() {
@@ -7,10 +13,18 @@ export default function Navbar() {
       <div className="logo">Insight Cluster</div>
 
       <div className="menu">
-        <Link to="/">Carga Masiva</Link>
-        <Link to="/ajuste">Ajuste</Link>
-        <Link to="/evaluacion">Evaluación</Link>
-        <Link to="/prediccion">Predicción</Link>
+        <Link to="/">
+          <UploadOutlined /> Carga Masiva
+        </Link>
+        <Link to="/ajuste">
+          <SettingOutlined /> Ajuste
+        </Link>
+        <Link to="/evaluacion">
+          <ExperimentOutlined /> Evaluación
+        </Link>
+        <Link to="/prediccion">
+          <BulbOutlined /> Predicción
+        </Link>
       </div>
     </nav>
   );

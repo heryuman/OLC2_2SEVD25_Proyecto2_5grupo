@@ -8,7 +8,8 @@ def create_app():
     # Registrar rutas
     from app.routes.version_routes import version_bp
     from app.routes.file_routes import file_bp
+    from app.routes.model_routes import model_bp
     app.register_blueprint(version_bp, url_prefix="/api/version")
     app.register_blueprint(file_bp,url_prefix="/api/file")
-
+    app.register_blueprint(model_bp,url_prefix="/api/model")
     return app

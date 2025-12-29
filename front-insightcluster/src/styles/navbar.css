@@ -2,28 +2,41 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
-  border-bottom: 1px solid #a08d8d;
-  background: #956464;
-  border-radius: 10px;
+  padding: 14px 24px;
+  background: #1f2937; /* gris oscuro */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  width: 100vw; 
+  margin: 0;
+  border-radius: 0; 
+  position: sticky; 
+  top: 0px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .logo {
-  font-size: 26px;
-  font-weight: bold;
-  color: #333;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f3f4f6; /* texto claro */
 }
 
 .menu a {
-  margin-left: 25px;
-  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 18px;
+  font-size: 15px;
   text-decoration: none;
-  color: #333;
+  color: #e5e7eb; /* texto claro */
   font-weight: 500;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .menu a:hover {
-  color: #000;
-  border-bottom: 2px solid #000;
-  padding-bottom: 4px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
