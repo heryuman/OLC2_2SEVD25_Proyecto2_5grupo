@@ -1,46 +1,76 @@
 import { useState } from "react";
 import UploadBox from "../components/UploadBox";
 import "../styles/cargamasiva.css";
+import { API_BASE_URL } from "../constant/url";
+
+type MessageType = "success" | "error" | null;
 
 export default function CargaMasiva() {
   const [file, setFile] = useState<File | null>(null);
+  const [message, setMessage] = useState<string>("");
+  const [messageType, setMessageType] = useState<MessageType>(null);
 
-  const limpiarDatos = async () => {
-    const response= await fetch("http://localhost:5000/api/estudiantes/limpieza",{
-      method:"GET"
-    });
-
-  const data =await response.json();
-    if (data.status=='success'){
-      alert("Limpieza realizada con éxito");
-    }
-
+  const showMessage = (msg: string, type: MessageType) => {
+    setMessage(msg);
+    setMessageType(type);
+    setTimeout(() => {
+      setMessage("");
+      setMessageType(null);
+    }, 5000);
   };
 
-    const entrenarModelo = async () => {
-  
-
-    try{
-      const response= await fetch("http://localhost:5000/api/model/",{
-        method:"GET",
-
+  const limpiarDatos = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/file/limpieza`, {
+        method: "GET",
       });
 
       const data = await response.json();
-
-      console.log(data);
-      if(data.success===true){
-        alert("Se entrenó el modelo correctamente");
+      if (data.status === "success") {
+        showMessage(
+          `✅ Limpieza realizada con éxito. Filas procesadas: ${data.rows}`,
+          "success"
+        );
+      } else {
+        showMessage(`❌ Error en la limpieza: ${data.message}`, "error");
       }
-    }
-    catch(err){
+    } catch (err) {
       console.error(err);
+      showMessage("❌ Error conectando con el servidor", "error");
+    }
+  };
+
+  const entrenarModelo = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/model/`, {
+        method: "GET",
+      });
+
+      const data = await response.json();
+      console.log(data);
+      if (data.success === true) {
+        showMessage("✅ Se entrenó el modelo correctamente", "success");
+      } else {
+        showMessage("❌ Error al entrenar el modelo", "error");
+      }
+    } catch (err) {
+      console.error(err);
+      showMessage("❌ Error conectando con el servidor", "error");
     }
   };
 
   const subirArchivo = async () => {
     if (!file) {
-      alert("Primero selecciona un archivo");
+      showMessage("⚠️ Primero selecciona un archivo", "error");
+      return;
+    }
+
+    // Validar que sea un archivo .csv
+    if (!file.name.endsWith(".csv")) {
+      showMessage(
+        "❌ Solo se permiten archivos .csv. El archivo debe tener extensión .csv",
+        "error"
+      );
       return;
     }
 
@@ -48,25 +78,41 @@ export default function CargaMasiva() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:5000/api/file/upload", {
+      const response = await fetch(`${API_BASE_URL}/api/file/upload`, {
         method: "POST",
         body: formData,
       });
 
       const data = await response.json();
-      console.log(data)
-      console.log(data.mensaje);
-      console.log(data.riesgo);
-      alert("Archivo subido con éxito");
+      console.log(data);
+
+      if (response.ok) {
+        showMessage(
+          `✅ Archivo "${file.name}" subido con éxito`,
+          "success"
+        );
+        setFile(null);
+      } else {
+        showMessage(
+          `❌ Error al subir archivo: ${data.error || "Error desconocido"}`,
+          "error"
+        );
+      }
     } catch (err) {
       console.error(err);
-      alert("Error enviando archivo");
+      showMessage("❌ Error enviando archivo al servidor", "error");
     }
   };
 
   return (
     <div className="carga-container">
       <h2>Carga Masiva</h2>
+
+      {message && (
+        <div className={`message-box message-${messageType}`}>
+          {message}
+        </div>
+      )}
 
       <div className="carga-content">
         {/* le mandamos a UploadBox la función para guardar el archivo */}

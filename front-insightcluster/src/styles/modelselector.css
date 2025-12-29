@@ -1,0 +1,122 @@
+.model-selector-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.model-selector-container h2 {
+  color: #f3f4f6;
+  font-size: 24px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.selector-description {
+  color: #d1d5db;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.algorithm-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.algorithm-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.algorithm-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #10b981, #059669);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.algorithm-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+}
+
+.algorithm-card:hover::before {
+  transform: scaleX(1);
+}
+
+.algorithm-card.selected {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+}
+
+.algorithm-card.selected::before {
+  transform: scaleX(1);
+}
+
+.card-icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.algorithm-card h3 {
+  color: #f3f4f6;
+  font-size: 20px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.algorithm-card p {
+  color: #d1d5db;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.selected-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #10b981;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .algorithm-cards {
+    grid-template-columns: 1fr;
+  }
+}
