@@ -7,7 +7,7 @@ model_bp = Blueprint("model", __name__)
 
 @model_bp.get("/training")
 def init_training():
-    hyperp1=[4,42,10]
-    hyperp2=[3,42,10]
+    hyperp1=[5,42,20]
+    hyperp2=[5,42,20]
     return training_model(hyperp1,hyperp2)
 
