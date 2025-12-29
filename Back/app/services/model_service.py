@@ -41,6 +41,16 @@ ASPECTOS = {
     ]
 }
 
+SILHOETE_C=0
+CALINSKI_C=0
+DAVIES_C=0
+INERCIA_C=0
+
+SILHOETE_R=0
+CALINSKI_R=0
+DAVIES_R=0
+INERCIA_R=0
+
 
 
 def training_model(hyperparams,hyperparams_r):
@@ -131,11 +141,12 @@ def segmentacion_clientes(df,hyperparams):
 
         k = hyperparams[0]
         rs=hyperparams[1]
-        ninit=hyperparams[2]
+        miter=hyperparams[2]
         kmeans_clientes = KMeans(
             n_clusters=k,
             random_state=rs,
-            n_init=ninit
+            n_init=20,
+            max_iter=miter
         )
 
         df["segmento_cliente"] = kmeans_clientes.fit_predict(X_clientes)
@@ -145,7 +156,18 @@ def segmentacion_clientes(df,hyperparams):
         calinski_c = calinski_harabasz_score(X_clientes, df["segmento_cliente"])
         davies_c = davies_bouldin_score(X_clientes, df["segmento_cliente"])
         inercia_c = kmeans_clientes.inertia_
-        
+
+        global SILHOETE_C
+        SILHOETE_C=round(silhouette_c,3)
+
+        global CALINSKI_C
+        CALINSKI_C=round(calinski_c,2)
+
+        global DAVIES_C
+        DAVIES_C=round(davies_c,3)
+
+        global INERCIA_C
+        INERCIA_C=round(inercia_c,2)        
         print("Clientes:")
         print("Silhouette:", round(silhouette_c, 3))
         print("Calinski-Harabasz:", round(calinski_c, 2))
@@ -219,12 +241,14 @@ def segmentacion_reseñas(df,hyperparams_r):
     #kmeans pra reseñas
         k_reseñas = hyperparams_r[0]
         rs_r=hyperparams_r[1]
-        ninit_r=hyperparams_r[2]
+        miter=hyperparams_r[2]
 
         kmeans_reseñas = KMeans(
         n_clusters=k_reseñas,
         random_state=rs_r,
-        n_init=ninit_r)
+        n_init=20,
+        max_iter=miter
+        )
 
         df["tema_reseña"] = kmeans_reseñas.fit_predict(X_tfidf)
 
@@ -234,6 +258,18 @@ def segmentacion_reseñas(df,hyperparams_r):
         calinski_r = calinski_harabasz_score(X_tfidf.toarray(), df["tema_reseña"])
         davies_r = davies_bouldin_score(X_tfidf.toarray(), df["tema_reseña"])
         inercia_r = kmeans_reseñas.inertia_
+
+        global SILHOETE_R
+        SILHOETE_R=round(silhouette_r,3)
+
+        global CALINSKI_R
+        CALINSKI_R=round(calinski_r,2)
+
+        global DAVIES_R
+        DAVIES_R=round(davies_r,3)
+
+        global INERCIA_R
+        INERCIA_R=round(inercia_r,2)
 
         print("\nReseñas:")
         print("Silhouette:", round(silhouette_r, 3))
@@ -309,3 +345,24 @@ def generar_descripcion(tema_id, palabras, aspectos):
         ),
         "palabras_clave": palabras
     }
+
+def get_stats():
+     metricas={
+          "clientes":{
+               "Silhouette":SILHOETE_C,
+               "Calinski-Harabasz":CALINSKI_C,
+               "Davies-Bouldin":DAVIES_C,
+               "Inercia":INERCIA_C
+          },
+          "reseñas":{
+               "Silhouette":SILHOETE_R,
+               "Calinski-Harabasz":CALINSKI_R,
+               "Davies-Bouldin":DAVIES_R,
+               "Inercia":INERCIA_R
+          }
+     }
+     return response_json(
+          message="Estadisticas obtenidas",
+          data=metricas
+     )
+
