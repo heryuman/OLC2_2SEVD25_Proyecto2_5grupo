@@ -27,10 +27,8 @@ export default function CargaMasiva() {
 
       const data = await response.json();
       if (data.status === "success") {
-        showMessage(
-          `✅ Limpieza realizada con éxito. Filas procesadas: ${data.rows}`,
-          "success"
-        );
+        showMessage( `✅ Limpieza realizada con éxito.`
+      , "success");
       } else {
         showMessage(`❌ Error en la limpieza: ${data.message}`, "error");
       }
