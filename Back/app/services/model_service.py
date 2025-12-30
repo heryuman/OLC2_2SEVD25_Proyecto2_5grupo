@@ -21,7 +21,7 @@ from nltk.corpus import stopwords
 
 # Obtener la lista de stop words en español
 lista_spanish = stopwords.words('spanish')
-
+DATA_REPORT=None
 
 ASPECTOS = {
     "usabilidad": [
@@ -82,6 +82,8 @@ def training_model(hyperparams,hyperparams_r):
              "info_clientes":seg_clientes,
              "info_reseñas": seg_reseñas
        }
+        global DATA_REPORT
+        DATA_REPORT=resp
 
         return response_json(
             message=" Modelo entrenado correctamente",
@@ -366,3 +368,8 @@ def get_stats():
           data=metricas
      )
 
+def get_report():
+     print("*/*/REPORTE*/*")
+     print(DATA_REPORT)
+
+     return DATA_REPORT

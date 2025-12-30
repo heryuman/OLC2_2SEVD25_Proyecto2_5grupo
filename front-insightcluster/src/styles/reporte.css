@@ -1,0 +1,90 @@
+.reporte-container {
+  width: 95%;
+  margin: auto;
+}
+
+h3 {
+  margin-top: 30px;
+}
+
+/* TABLA */
+.reporte-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.reporte-table th,
+.reporte-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.reporte-table th {
+  background: #7e4747;
+}
+
+/* MÉTRICAS */
+.metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.metrica-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* TEMAS */
+.temas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.tema-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.keywords {
+  margin-top: 10px;
+}
+
+.keyword {
+  display: inline-block;
+  background: #694469;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.btn-download {
+  background: #333;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn-download:hover {
+  background: #000;
+}
+
+.btn-container{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
