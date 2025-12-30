@@ -129,9 +129,9 @@ def limpiar():
         if os.path.exists(ruta):
             os.remove(ruta)
             print('Archivo anterior eliminado')
-        else:
-            df.to_csv(ruta, index=False, encoding='utf-8-sig')
-            print('Archivo nuevo creado')
+        
+        df.to_csv(ruta, index=False, encoding='utf-8-sig')
+        print('Archivo nuevo creado')
 
 
         return jsonify({
