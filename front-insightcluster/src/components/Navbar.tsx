@@ -22,8 +22,8 @@ export default function Navbar() {
         <Link to="/evaluacion">
           <ExperimentOutlined /> Evaluación
         </Link>
-        <Link to="/prediccion">
-          <BulbOutlined /> Predicción
+        <Link to="/reporte">
+          <BulbOutlined /> Reporte
         </Link>
       </div>
     </nav>

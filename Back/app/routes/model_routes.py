@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from app.services.model_service import (
- training_model,get_stats 
+ training_model,get_stats ,get_report
 )
 
 model_bp = Blueprint("model", __name__)
@@ -26,3 +26,10 @@ def set_stas():
 
 
     return training_model(lparams_c,lparams_r)
+
+@model_bp.get("/report")
+def get__report():
+
+   
+
+    return  get_report()
