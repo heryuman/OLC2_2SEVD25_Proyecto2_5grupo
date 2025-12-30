@@ -1,18 +1,14 @@
 import { useState } from "react";
 import ConfigPanel from "../components/ConfigPanel";
-import ModelSelector from "../components/ModelSelector";
 import "../styles/ajuste.css";
 import { API_BASE_URL } from "../constant/url";
 
 type MessageType = "success" | "error" | "info" | null;
 
-interface ModelConfig {
-  algorithm: string;
-  n_clusters: number;
-  max_iterations: number;
-  tolerance: number;
+interface ClusterConfig {
+  cluster: number;
   random_state: number;
-  init_method: string;
+  max_iter: number;
 }
 
 export default function Ajuste() {
@@ -20,13 +16,16 @@ export default function Ajuste() {
   const [messageType, setMessageType] = useState<MessageType>(null);
   const [isTraining, setIsTraining] = useState(false);
 
-  const [config, setConfig] = useState<ModelConfig>({
-    algorithm: "kmeans",
-    n_clusters: 3,
-    max_iterations: 300,
-    tolerance: 0.0001,
+  const [configClientes, setConfigClientes] = useState<ClusterConfig>({
+    cluster: 3,
     random_state: 42,
-    init_method: "k-means++",
+    max_iter: 300,
+  });
+
+  const [configReseñas, setConfigReseñas] = useState<ClusterConfig>({
+    cluster: 3,
+    random_state: 42,
+    max_iter: 300,
   });
 
   const showMessage = (msg: string, type: MessageType) => {
@@ -38,8 +37,15 @@ export default function Ajuste() {
     }, 5000);
   };
 
-  const handleConfigChange = (key: keyof ModelConfig, value: any) => {
-    setConfig((prev) => ({
+  const handleConfigClientesChange = (key: string, value: any) => {
+    setConfigClientes((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleConfigReseñasChange = (key: string, value: any) => {
+    setConfigReseñas((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -48,19 +54,26 @@ export default function Ajuste() {
   const entrenarModelo = async () => {
     setIsTraining(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/model/train`, {
+      const payload = {
+        hyperparameters: {
+          clientes: configClientes,
+          reseñas: configReseñas,
+        },
+      };
+
+      const response = await fetch(`${API_BASE_URL}/api/model/set_stats`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(config),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
       
-      if (data.status === "success") {
+      if (data.success) {
         showMessage(
-          `✅ Modelo entrenado exitosamente con ${config.n_clusters} clusters`,
+          `✅ Modelo entrenado exitosamente. Clientes: ${configClientes.cluster} clusters, Reseñas: ${configReseñas.cluster} clusters`,
           "success"
         );
       } else {
@@ -75,26 +88,22 @@ export default function Ajuste() {
   };
 
   const resetConfig = () => {
-    setConfig({
-      algorithm: "kmeans",
-      n_clusters: 3,
-      max_iterations: 300,
-      tolerance: 0.0001,
+    setConfigClientes({
+      cluster: 3,
       random_state: 42,
-      init_method: "k-means++",
+      max_iter: 300,
+    });
+    setConfigReseñas({
+      cluster: 3,
+      random_state: 42,
+      max_iter: 300,
     });
     showMessage("⚙️ Configuración restablecida", "info");
   };
 
   return (
     <div className="ajuste-container">
-      <div className="ajuste-header">
-        <h1>⚙️ Configuración y Ajuste del Modelo</h1>
-        <p className="ajuste-subtitle">
-          Configure los parámetros del modelo de clustering para segmentar sus
-          clientes y reseñas
-        </p>
-      </div>
+      
 
       {message && (
         <div className={`message-box ${messageType}`}>
@@ -103,15 +112,18 @@ export default function Ajuste() {
       )}
 
       <div className="ajuste-content">
-        <ModelSelector
-          algorithm={config.algorithm}
-          onChange={(value) => handleConfigChange("algorithm", value)}
+        
+
+        <ConfigPanel
+          title="Configuración de Clientes"
+          config={configClientes}
+          onChange={handleConfigClientesChange}
         />
 
         <ConfigPanel
-          config={config}
-          onChange={handleConfigChange}
-          algorithm={config.algorithm}
+          title="Configuración de Reseñas"
+          config={configReseñas}
+          onChange={handleConfigReseñasChange}
         />
 
         <div className="actions-panel">
@@ -136,30 +148,36 @@ export default function Ajuste() {
 
         <div className="info-panel">
           <h3>📋 Configuración Actual</h3>
-          <div className="config-summary">
-            <div className="config-item">
-              <span className="label">Algoritmo:</span>
-              <span className="value">{config.algorithm.toUpperCase()}</span>
+          <div className="config-summary-grid">
+            <div className="config-section">
+              <h4>👥 Clientes</h4>
+              <div className="config-item">
+                <span className="label">Clusters:</span>
+                <span className="value">{configClientes.cluster}</span>
+              </div>
+              <div className="config-item">
+                <span className="label">Random State:</span>
+                <span className="value">{configClientes.random_state}</span>
+              </div>
+              <div className="config-item">
+                <span className="label">Max Iteraciones:</span>
+                <span className="value">{configClientes.max_iter}</span>
+              </div>
             </div>
-            <div className="config-item">
-              <span className="label">Número de Clusters:</span>
-              <span className="value">{config.n_clusters}</span>
-            </div>
-            <div className="config-item">
-              <span className="label">Iteraciones Máximas:</span>
-              <span className="value">{config.max_iterations}</span>
-            </div>
-            <div className="config-item">
-              <span className="label">Tolerancia:</span>
-              <span className="value">{config.tolerance}</span>
-            </div>
-            <div className="config-item">
-              <span className="label">Random State:</span>
-              <span className="value">{config.random_state}</span>
-            </div>
-            <div className="config-item">
-              <span className="label">Método de Inicialización:</span>
-              <span className="value">{config.init_method}</span>
+            <div className="config-section">
+              <h4>💬 Reseñas</h4>
+              <div className="config-item">
+                <span className="label">Clusters:</span>
+                <span className="value">{configReseñas.cluster}</span>
+              </div>
+              <div className="config-item">
+                <span className="label">Random State:</span>
+                <span className="value">{configReseñas.random_state}</span>
+              </div>
+              <div className="config-item">
+                <span className="label">Max Iteraciones:</span>
+                <span className="value">{configReseñas.max_iter}</span>
+              </div>
             </div>
           </div>
         </div>

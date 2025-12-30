@@ -42,7 +42,7 @@ export default function CargaMasiva() {
 
   const entrenarModelo = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/model/`, {
+      const response = await fetch(`${API_BASE_URL}/api/model/training`, {
         method: "GET",
       });
 
