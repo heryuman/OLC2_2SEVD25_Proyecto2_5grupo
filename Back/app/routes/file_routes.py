@@ -110,7 +110,7 @@ def limpiar():
         
         df['fecha_reseña'] = pd.to_datetime(
             df['fecha_reseña'],
-            format='%Y-%m-%d',
+            format='%d/%m/%Y',
             errors='coerce'
         )
         df = df.dropna(subset=['fecha_reseña'])
