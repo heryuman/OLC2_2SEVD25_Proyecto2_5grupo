@@ -171,20 +171,109 @@ Si el archivo existe, se elimina y se genera uno nuevo.
 
 ------------------------------------------------------------------------
 
-#  2. Elección del Modelo (Pendiente)
+#  2. Elección del Modelo
 
-> *En esta sección se documentará el análisis comparativo entre modelos
-> candidatos, justificación de la selección y métricas iniciales de
-> validación.*
+## Elección del Modelo: K-Means
+
+**Motivo de elección:**  
+
+El modelo **K-Means** se seleccionó por su **eficiencia y simplicidad** para agrupar datos sin etiquetas en **clusters homogéneos**. Es ideal cuando se busca **identificar patrones de similitud** y segmentar datos de manera rápida.
+
+**Razones específicas:**
+
+1. **Simplicidad y rapidez:**  
+   K-Means es fácil de implementar y computacionalmente eficiente para conjuntos de datos medianos y grandes.
+
+2. **Interpretabilidad:**  
+   Los clusters resultantes son fáciles de interpretar, ya que cada punto pertenece a un solo cluster y se puede analizar su centroide.
+
+3. **Flexibilidad:**  
+   Permite controlar el número de clusters (*K*), ajustándose a la necesidad de segmentación del problema.
+
+4. **Efectividad para datos continuos:**  
+   Funciona muy bien con datos numéricos y escalados, como métricas de desempeño, consumo o características medibles de objetos/usuarios.
+
+
 
 ------------------------------------------------------------------------
 
 #  3. Decisiones del Modelo (Pendiente)
 
+## Decisiones del Modelo
+
+Durante el desarrollo del proyecto, se tomaron varias decisiones importantes para garantizar que el modelo K-Means funcionara de manera efectiva y consistente:
+
+1. **Número de Clusters (*K*):**  
+   Se decidió determinar el número óptimo de clusters utilizando el **método del codo (Elbow Method)**, evaluando la variación intra-cluster para encontrar un balance entre complejidad y representatividad de los datos.
+
+2. **Escalado de datos:**  
+   Todas las variables numéricas fueron normalizadas usando **StandardScaler** para asegurar que cada característica contribuyera de manera equitativa al cálculo de distancias, evitando que variables con mayor magnitud dominen el clustering.
+
+
+3. **Número de iteraciones:**  
+   Se configuró un límite máximo de iteraciones para garantizar que el algoritmo convergiera de manera eficiente, evitando ciclos infinitos en casos de datos con alta dispersión.
+
+4. **Evaluación de clusters:**  
+   Se utilizaron métricas internas como **inercia** y **silhouette score** para validar la calidad de los clusters y ajustar parámetros según la estructura de los datos.
+
+5. **Tratamiento de valores atípicos:**  
+   Se decidió analizar y, en ciertos casos, excluir valores atípicos que podían sesgar los centroides y afectar la segmentación final.
+
+Estas decisiones permiten que el modelo K-Means entregue resultados confiables y útiles para la interpretación y segmentación de los datos.
+
+
 ------------------------------------------------------------------------
 
-#  4. Conclusiones (Pendiente)
+#  4. Conclusiones
+
+## Conclusiones
+
+Después de aplicar el modelo K-Means y analizar los resultados, se pueden extraer las siguientes conclusiones:
+
+1. **Segmentación efectiva de los datos:**  
+   El modelo logró agrupar los datos en clusters coherentes, permitiendo identificar patrones y comportamientos similares dentro de cada grupo.
+
+2. **Importancia de la limpieza y escalado:**  
+   La normalización de los datos y la eliminación de valores atípicos resultaron fundamentales para obtener clusters precisos y representativos.
+
+3. **Validación de parámetros:**  
+   La elección del número de clusters mediante el método del codo y la evaluación con métricas como **silhouette score** aseguraron que la segmentación fuera significativa y no arbitraria.
+
+4. **Aplicabilidad práctica:**  
+   Los clusters obtenidos pueden utilizarse para **toma de decisiones**
+
+5. **Posibles mejoras:**  
+   Futuras iteraciones podrían incluir la comparación con otros algoritmos de clustering (por ejemplo, DBSCAN o Gaussian Mixture Models) y la incorporación de más variables para aumentar la riqueza del análisis.
+
+En general, el modelo K-Means demostró ser **una herramienta eficiente y confiable** para el análisis no supervisado de este conjunto de datos.
+
 
 ------------------------------------------------------------------------
 
-#  5. Decisiones Tomadas Durante el Desarrollo (Pendiente)
+#  5. Decisiones Tomadas Durante el Desarrollo
+
+## Decisiones Tomadas Durante el Desarrollo
+
+Durante el desarrollo del proyecto se tomaron decisiones clave para asegurar la correcta preparación de los datos y la efectividad del modelo K-Means:
+
+1. **Selección de variables relevantes:**  
+   Se analizaron todas las variables disponibles y se eligieron únicamente aquellas que aportan información significativa para el clustering, eliminando columnas redundantes o con muchos valores faltantes.
+
+2. **Tratamiento de datos faltantes:**  
+   Se optó por imputar o eliminar registros según el contexto de la variable, garantizando que los datos utilizados fueran consistentes y no afectaran la segmentación.
+
+3. **Normalización y escalado:**  
+   Todas las características numéricas fueron normalizadas para asegurar que cada variable contribuyera equitativamente al cálculo de distancias entre los datos.
+
+4. **Elección de la técnica de clustering:**  
+   Se seleccionó **K-Means** por su simplicidad, rapidez y facilidad de interpretación, siendo adecuado para conjuntos de datos medianos y continuos.
+
+5. **Determinación del número de clusters (*K*):**  
+   Se utilizó el **método del codo (Elbow Method)** para encontrar un balance entre la compactación de los clusters y la complejidad del modelo.
+
+
+6. **Manejo de valores atípicos:**  
+   Se identificaron y trataron valores atípicos que podrían distorsionar los centroides y afectar la interpretación de los clusters.
+
+Estas decisiones fueron fundamentales para **asegurar la confiabilidad del modelo** y obtener resultados que puedan ser utilizados para análisis y toma de decisiones posteriores.
+

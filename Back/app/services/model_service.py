@@ -2,7 +2,7 @@ from app.utils.response import response_json
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
-import nltk
+#import nltk
 import os
 import joblib
 import pandas as pd
@@ -12,15 +12,15 @@ from sklearn.metrics import (
     davies_bouldin_score
 )
 
-nltk.download('punkt_tab')
+#nltk.download('punkt_tab')
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
 # Descargar la lista de palabras (solo la primera vez)
-nltk.download('stopwords')
+#nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 # Obtener la lista de stop words en español
-lista_spanish = stopwords.words('spanish')
+#lista_spanish = stopwords.words('spanish')
 DATA_REPORT=None
 
 ASPECTOS = {
