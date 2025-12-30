@@ -146,7 +146,7 @@ export default function Evaluacion() {
         </p>
         <div className="header-actions">
           <button className="btn-refresh" onClick={fetchStats} disabled={loading}>
-            {loading ? "Actualizando..." : "Actualizar métricas"}
+            {loading ? "Actualizando..." : "Recargar métricas"}
           </button>
           {lastUpdated && <span className="timestamp">Última actualización: {lastUpdated}</span>}
         </div>
