@@ -38,7 +38,14 @@ ASPECTOS = {
     ],
     "soporte": [
         "soporte", "atención", "ayuda", "acompañamiento"
+    ],
+      "calidad": [
+        "calidad", "duracion", "durabilidad", "original"
+    ],
+      "atención al cliente": [
+        "atencion", "bien", "volveria", "volver","regresar","cliente"
     ]
+
 }
 
 SILHOETE_C=0

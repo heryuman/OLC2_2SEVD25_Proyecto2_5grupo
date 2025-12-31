@@ -9,6 +9,10 @@
 
 ------------------------------------------------------------------------
 
+# InsightCluster – Proyecto 2
+
+Aplicación full‑stack para segmentación de clientes y agrupamiento de reseñas usando K-Means. Incluye limpieza de datos, entrenamiento, evaluación de métricas internas y visualización en frontend.
+
 ## Descripción General del Proyecto
 
 Esta sección realiza un proceso completo de limpieza y depuración de
@@ -197,7 +201,7 @@ El modelo **K-Means** se seleccionó por su **eficiencia y simplicidad** para ag
 
 ------------------------------------------------------------------------
 
-#  3. Decisiones del Modelo (Pendiente)
+#  3. Decisiones del Modelo
 
 ## Decisiones del Modelo
 
@@ -221,6 +225,7 @@ Durante el desarrollo del proyecto, se tomaron varias decisiones importantes par
 
 Estas decisiones permiten que el modelo K-Means entregue resultados confiables y útiles para la interpretación y segmentación de los datos.
 
+Para las reseñas se realizan las elecciones similares, pero aca se añade el proceso de Normalización del texto y la vecotrización Numerica mediante *TF-IDF*
 
 ------------------------------------------------------------------------
 
@@ -277,3 +282,143 @@ Durante el desarrollo del proyecto se tomaron decisiones clave para asegurar la 
 
 Estas decisiones fueron fundamentales para **asegurar la confiabilidad del modelo** y obtener resultados que puedan ser utilizados para análisis y toma de decisiones posteriores.
 
+
+
+
+---
+
+## Arquitectura
+- **Backend:** Flask (Python), endpoints REST en `Back/app/routes/`, lógica en `Back/app/services/`, respuestas uniformes con `Back/app/utils/response.py`.
+- **Modelo:** K-Means (scikit-learn) para dos vistas: clientes (datos numéricos + categoría) y reseñas (texto con TF-IDF).
+- **Frontend:** React + Vite + TypeScript (`front-insightcluster/`), rutas con React Router.
+
+## Flujo de trabajo (end-to-end)
+1) **Carga**: Subir CSV en la vista Carga Masiva (`/`) → POST `/api/file/upload`.
+2) **Limpieza**: Ejecutar limpieza → GET `/api/file/limpieza` → genera `Back/clean_files/data_clean.csv`.
+3) **Ajuste**: Configurar hiperparámetros en Ajuste (`/ajuste`) → POST `/api/model/set_stats` (clientes y reseñas por separado).
+4) **Entrenamiento**: Se ejecuta K-Means para clientes y reseñas; guarda artefactos en `Back/models_ml/`.
+5) **Evaluación**: Consultar métricas en Evaluación (`/evaluacion`) → GET `/api/model/stats`.
+
+## Endpoints principales
+- POST `/api/file/upload` – sube CSV crudo.
+- GET `/api/file/limpieza` – limpia y escribe `clean_files/data_clean.csv`.
+- GET `/api/model/training` – entrenamiento con valores por defecto (K=5, RS=42, max_iter=20 en código base).
+- POST `/api/model/set_stats` – entrenamiento con hiperparámetros enviados desde el frontend.
+- GET `/api/model/stats` – expone métricas internas de clustering para clientes y reseñas.
+
+## Modelo y preprocesamiento
+**Clientes**
+- Features: frecuencia_compra, monto_total_gastado, monto_promedio_compra, dias_desde_ultima_compra, antiguedad_cliente_meses, numero_productos_distintos, canal_principal.
+- Preproceso: one-hot a canal_principal, escalado con StandardScaler.
+- Modelo: K-Means (n_clusters=K, random_state=RS, max_iter=MI, n_init=20).
+- Artefactos: columnas, scaler, modelo guardados en `models_ml/clientes/`.
+
+**Reseñas**
+- Texto en `texto_reseña`.
+- Preproceso: limpieza básica (lower, sin números/puntuación), TF-IDF (max_features=500, min_df=2, max_df=0.9, ngram_range=(1,2), stopwords ES).
+- Modelo: K-Means con los mismos hiperparámetros.
+- Artefactos: vectorizador y modelo en `models_ml/reseñas/`.
+- Descripción de temas: top palabras de cada centroide + mapeo a aspectos (usabilidad, rendimiento, experiencia, cumplimiento, soporte).
+## Estructura del backend
+```
+Back/
+├── app.py                  # Punto de entrada Flask
+├── requirements.txt        # Dependencias backend
+├── app/
+│   ├── __init__.py
+│   ├── routes/
+│   │   ├── file_routes.py      # Upload y limpieza
+│   │   └── version_routes.py   # Información de versión/health
+│   ├── services/
+│   │   ├── file_service.py     # Lógica de carga/limpieza
+│   │   └── version_service.py  # Lógica de versión
+│   └── utils/response.py       # Respuestas estándar
+├── clean_files/
+│   └── data_clean.csv          # Dataset limpio generado
+├── models_ml/                  # Modelos y artefactos
+└── uploads/                    # Archivos subidos
+```
+
+## Estructura del frontend
+```
+front-insightcluster/
+├── index.html
+├── vite.config.ts
+├── package.json
+├── tsconfig*.json
+├── public/
+└── src/
+    ├── main.tsx               # Entrypoint React
+    ├── App.tsx                # Rutas principales
+    ├── constant/url.ts        # Base URL API
+    ├── pages/
+    │   ├── CargaMasiva.tsx    # Subida y limpieza
+    │   ├── Ajuste.tsx         # Ajuste de KMeans
+    │   └── Evaluacion.tsx     # Métricas de clustering
+    ├── components/
+    │   ├── Navbar.tsx
+    │   ├── UploadBox.tsx
+    │   └── ConfigPanel.tsx
+    └── styles/                # CSS modular (ajuste, evaluación, etc.)
+```
+
+## Licencia
+Proyecto académico; uso interno para la entrega del curso.
+- `models/modelo_entrenado.pkl`: Modelo entrenado y métricas.
+
+---
+
+## 7. Problemas Comunes y Solución
+
+- "No hay datos cargados": Cargar CSV vía `/api/cargaMasiva` antes de limpiar/entrenar.
+- "Modelo no disponible": Ejecutar entrenamiento para generar `models/modelo_entrenado.pkl`.
+- Error en predicción por campos faltantes: completar todos los requeridos del endpoint.
+- Métricas no disponibles: entrenar y luego consultar `/api/Rendimiento/consultar_metricas`.
+
+### 7.1 Dependencias del Backend
+
+Se definió las siguientes dependencias en `requirements.txt`:
+
+```
+Flask==3.1.2          # Framework web
+flask-cors==6.0.1     # Manejo de CORS
+matplotlib==3.10.7    # Visualización de datos
+numpy==2.3.5          # Operaciones numéricas
+pandas==2.3.3         # Manipulación de datos
+scikit-learn==1.7.2   # Machine Learning
+```
+
+---
+
+## 8. Estructura del Frontend
+
+El desarrollador implementó el frontend con la siguiente organización:
+
+### 8.1 Estructura de Directorios
+
+```
+frontend/
+├── index.html              # Punto de entrada HTML
+├── package.json            # Configuración y dependencias
+├── vite.config.js         # Configuración de Vite
+├── public/                # Recursos estáticos
+└── src/                   # Código fuente
+    ├── main.jsx           # Entrada de React
+    ├── App.jsx            # Componente principal
+    ├── App.css            # Estilos globales
+    ├── index.css          # Estilos base
+    ├── style.css          # Estilos adicionales
+    ├── components/        # Componentes reutilizables
+    │   ├── CargaArchivo.jsx    
+    │   ├── Limpieza.jsx
+    │   ├── Metricas.jsx
+    │   ├── ModeloE.jsx
+    │   └── Prediccion.jsx
+    ├── pages/             # Páginas principales
+    │   ├── Dashboard.jsx
+    │   ├── Dashboard.module.css
+    │   └── Home.jsx
+    ├── constant/          # Constantes de configuración
+    │   └── url.js
+    └── hooks/             # React Hooks personalizados
+```
